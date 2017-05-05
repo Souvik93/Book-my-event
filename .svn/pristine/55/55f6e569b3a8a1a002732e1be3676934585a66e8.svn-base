@@ -1,0 +1,71 @@
+package com.bme.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.bme.pojo.Rating;
+
+import com.bme.service.IRatingService;
+
+@Controller
+public class RatingContoller {
+	
+	@Autowired
+	private IRatingService ratingService;
+	@RequestMapping(value="/saveRating",method=RequestMethod.POST)
+	public @ResponseBody String saveRating(@RequestBody Rating rating){
+			
+			 return ratingService.addRating(rating);
+	}
+	@RequestMapping(value="/showLikes" ,method=RequestMethod.GET)
+	public @ResponseBody String showLikes(@PathVariable("eventId") @RequestParam("nol") String rating){
+		Integer count=ratingService.showNoOfDislikes(Integer.parseInt(rating));
+		return count.toString();		
+	}
+	@RequestMapping(value="/showDislikes" ,method = RequestMethod.GET)
+	public @ResponseBody String showDislikes(@RequestParam("name") String name,Map<String, Object> map){
+		Integer count=ratingService.showNoOfDislikes(Integer.parseInt(name));
+		return count.toString();
+	}
+	
+	
+	/*@RequestMapping(value="/showDislikes1" ,method = RequestMethod.GET)
+	public @ResponseBody List<Rating> showDislikes1(@RequestParam("name") String name,Map<String, Object> map){
+		int eId=Integer.parseInt(name);
+		
+		Integer count=ratingService.showNoOfDislikes(eId);
+		String count1=count.toString();
+		
+		
+		 List<Rating> RatingList = new ArrayList<Rating>();  
+		  
+		 RatingList.add(new Rating(1,1,1,"Like"));
+		 
+		 RatingList.add(new Rating(1,1,1,"Dislike"));
+		
+		
+		//return "No of Likes "+count1;
+		 return RatingList;
+		
+		
+		
+		
+	}*/
+	
+}
